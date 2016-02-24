@@ -1,0 +1,52 @@
+$def with (files_and_sizes, note="")
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Upload/Download</title>
+	</head>
+		
+	<body>
+	$if note != "":
+		<p style="color: orange;">$note</p>
+	<!-- end if -->
+		<table>
+		<form method="post" action="">
+			<tr>
+				<th>File (click to download)</th>
+				<th>Size</th>
+				<th>Delete?</th>
+			</tr>
+		$for fs in files_and_sizes:
+			<tr>
+			$if fs == files_and_sizes[-1]:
+				<td align="center" colspan="3">$fs[0] ($fs[1])</td>
+			$else:
+				<td><a type="application/x-download" href="static/$fs[0]">$fs[0]</a></td>
+				<td>$fs[1]</td>
+				<td><center><input type="checkbox" name="del$fs[0]" value="$fs[0]" /></center></td>
+			</tr>
+		<!-- end for -->
+			<tr>
+				<td colspan="3" align="center"><input type="submit" value="Delete File(s)" /></td>
+			</tr>
+		</form>
+
+		<tr><td>&nbsp;</td></tr>
+
+		<form enctype="multipart/form-data" method="post" action="">
+			<tr>
+				<th colspan="2">Upload New File (max 2 GB)</th>
+				<th>Overwrite?</th>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="file" name="upfile" style="width: 100%; "/></td>
+				<td><center><input type="checkbox" name="overwrite" value="yes" /></center></td>
+			</tr>
+			<tr>
+				<td colspan="3" align="center"><input type="submit" value="Upload File" /></td>
+			</tr>
+		</table>
+		</form>
+	</body>
+</html>
