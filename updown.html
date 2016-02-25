@@ -4,6 +4,18 @@ $def with (files_and_sizes, note="")
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<title>Upload/Download</title>
+		
+		<script type="text/javascript">
+			<!-- (de)select all checkboxes for file deletion -->
+			function changeAllCheckboxes(cb) {
+				var inputs = document.getElementsByTagName("input");
+				for (var i = 0, n = inputs.length; i < n; i++) {
+					if (inputs[i].type == "checkbox" && inputs[i].name.startsWith("del")) {
+						inputs[i].checked = cb.checked;
+					}
+				}
+			}
+		</script>
 	</head>
 		
 	<body>
@@ -13,22 +25,24 @@ $def with (files_and_sizes, note="")
 		<table>
 		<form method="post" action="">
 			<tr>
-				<th>File (click to download)</th>
-				<th>Size</th>
-				<th>Delete?</th>
+				<th><a href="/?sort=name">File (click to download)</a></th>
+				<th><a href="/?sort=size">Size</a></th>
+				<th><input type="checkbox" onclick="changeAllCheckboxes(this)" /></th>
 			</tr>
-		$for fs in files_and_sizes:
+	$for fs in files_and_sizes:
+		$if fs == files_and_sizes[-1]:
 			<tr>
-			$if fs == files_and_sizes[-1]:
 				<td align="center" colspan="3">$fs[0] ($fs[1])</td>
-			$else:
+			</tr>
+		$else:
+			<tr id="filerow">
 				<td><a type="application/x-download" href="static/$fs[0]">$fs[0]</a></td>
 				<td>$fs[1]</td>
 				<td><center><input type="checkbox" name="del$fs[0]" value="$fs[0]" /></center></td>
 			</tr>
-		<!-- end for -->
+	<!-- end for -->
 			<tr>
-				<td colspan="3" align="center"><input type="submit" value="Delete File(s)" /></td>
+				<td colspan="3" align="right"><input type="submit" value="Delete File(s)" /></td>
 			</tr>
 		</form>
 
@@ -36,8 +50,8 @@ $def with (files_and_sizes, note="")
 
 		<form enctype="multipart/form-data" method="post" action="">
 			<tr>
-				<th colspan="2">Upload New File (max 2 GB)</th>
-				<th>Overwrite?</th>
+				<th colspan="2">Upload New File</th>
+				<th>Overwrite</th>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="file" name="upfile" style="width: 100%; "/></td>
