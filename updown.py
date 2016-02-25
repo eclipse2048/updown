@@ -24,7 +24,9 @@ class UpDown:
 	sortReverse = False	# False=ascending, True=descending
 
 	def getFilesAndSizes(self):
-		files = os.listdir("static/")
+		files = []
+		if os.path.isdir("static/"):
+			files = os.listdir("static/")
 		sizes = [os.path.getsize("static/" + f) for f in files]
 		fs = zip(files, sizes)
 		fs.sort(key=itemgetter(UpDown.sortBy), reverse=UpDown.sortReverse)
