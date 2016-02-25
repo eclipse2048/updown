@@ -112,6 +112,9 @@ class UpDown:
 					fout_mode = "wb"
 				else:	
 					foutmode = "w"
+
+				if not os.path.isdir("static"):
+					os.mkdir("static")
 				fout = open(filename, foutmode)
 				fout.write(item[1].file.read())
 				fout.close()
