@@ -1,8 +1,8 @@
 # updown – a simple file uploader/downloader
 
-Updown is a simple web script to upload and download files. It is written in Python and runs on web.py. It is available under the GPLv3 License.
+updown is a simple web script to upload and download files. It is written in Python and runs on web.py. It is available under the GPLv3 License.
 
-The script shows a web page that lists all currently uploaded files, sortable by name and size. You can download and delete existing files, and you can upload new ones.   
+The script shows a web page listing all currently uploaded files, sortable by name and size. You can download and delete existing files and upload new ones. That's why it's called updown …
 
 NOTE: There is no security whatsoever. No password, no encryption, nada. The only thing that even remotely counts as a security measure is the (very basic) overwrite guard for your uploads. Other than that, nothing. Everybody who knows the URL to your script can download or delete your files and upload stuff onto your server that you may not want there. Use at your own risk!
 
