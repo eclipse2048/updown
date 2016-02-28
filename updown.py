@@ -10,7 +10,10 @@ from operator import itemgetter
 
 # set some vars for web.py
 RELATIVE_URL = "/"
-urls = (RELATIVE_URL, "UpDown")
+urls = (
+	RELATIVE_URL, "UpDown",
+	RELATIVE_URL + "favicon.ico", "Favicon"
+)
 render = web.template.render(".")
 app = web.application(urls, globals())
 
@@ -18,8 +21,12 @@ app = web.application(urls, globals())
 MAX_FILE_SIZE_GB = 2
 cgi.maxlen = MAX_FILE_SIZE_GB * 1024 * 1024 * 1024
 
+class Favicon:
+	def GET(self):
+		return open("favicon.ico", mode="rb").read()
+
 class UpDown:
-	
+
 	sortBy = 0	# 0=name, 1=size
 	sortReverse = False	# False=ascending, True=descending
 
