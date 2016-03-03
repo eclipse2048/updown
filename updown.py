@@ -91,18 +91,21 @@ class UpDown:
 			if item[0][:3] == "del":
 				f = "static/" + item[1]
 				if os.path.isfile(f):
-					try:
-						os.remove(f)
-						print "Deleted file", f
-						note = "File(s) deleted."
-					except Error:
-						print "Error while trying to delete file", f 
+					if os.access(f, os.W_OK):
+						try:
+							os.remove(f)
+							if note == "":
+								note = "File(s) deleted."
+						except OSError:
+							note = "Error deleting file " + item[1] + "."
+					else:
+						note = "Can't delete file " + item[1] + "."
 
 			# upload new file
 			elif item[0] == "upfile":
 				# no upload file given? do nothing
 				if item[1] == {} or item[1].filename == "":	
-					return render.updown(self.getFilesAndSizes(), "")
+					continue
 
 				# remove Windows slashes
 				filepath = item[1].filename.replace('\\','/')
@@ -112,7 +115,7 @@ class UpDown:
 				if os.path.exists(filename):
 					if "overwrite" not in input.keys() or input["overwrite"] != "yes":
 						return render.updown(self.getFilesAndSizes(), "File already exists. Check box to overwrite.")
-				print "Uploading", filename
+				print "Uploading", filepath
 
 				# use different file write mode depending on OS
 				if platform.system() == "Windows":
@@ -121,11 +124,27 @@ class UpDown:
 					foutmode = "w"
 
 				if not os.path.isdir("static"):
-					os.mkdir("static")
-				fout = open(filename, foutmode)
-				fout.write(item[1].file.read())
-				fout.close()
-				return render.updown(self.getFilesAndSizes(), "Uploaded file " + os.path.basename(filepath) + ".")
+					if os.access(".", os.W_OK):
+						try:
+							os.mkdir("static")
+						except OSError:
+							note = "Error: Could not create subdirectory."
+							continue
+					else:
+						note = "Insufficient permissions to create subdirectory."
+						continue
+				if os.access(".", os.W_OK):
+					try:
+						fout = open(filename, foutmode)
+						fout.write(item[1].file.read())
+						fout.close()
+						note = "Uploaded file " + os.path.basename(filepath) + "."
+					except IOError:
+						note = "Error: Could not upload file."
+						continue
+				else:
+					note = "Insufficient permissions to upload file."
+					continue
 
 		return render.updown(self.getFilesAndSizes(), note)
 
