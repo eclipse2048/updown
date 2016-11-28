@@ -82,8 +82,8 @@ class UpDown:
 		try:
 			input = web.input(upfile={})
 		except ValueError:	# file is too big
-			return render.updown(self.getFilesAndSizes(), "Upload failed. File must be smaller than " + MAX_FILE_SIZE_GB + "GB.") 
-		
+			return render.updown(self.getFilesAndSizes(), "Upload failed. File must be smaller than " + MAX_FILE_SIZE_GB + "GB.")
+
 		note = ""
 		for item in input.items():
 
@@ -104,7 +104,7 @@ class UpDown:
 			# upload new file
 			elif item[0] == "upfile":
 				# no upload file given? do nothing
-				if item[1] == {} or item[1].filename == "":	
+				if item[1] == {} or item[1].filename == "":
 					continue
 
 				# remove Windows slashes
@@ -120,7 +120,7 @@ class UpDown:
 				# use different file write mode depending on OS
 				if platform.system() == "Windows":
 					fout_mode = "wb"
-				else:	
+				else:
 					foutmode = "w"
 
 				if not os.path.isdir("static"):
@@ -133,7 +133,7 @@ class UpDown:
 					else:
 						note = "Insufficient permissions to create subdirectory."
 						continue
-				if os.access(".", os.W_OK):
+				if os.access("./static/", os.W_OK):
 					try:
 						fout = open(filename, foutmode)
 						fout.write(item[1].file.read())
@@ -150,5 +150,5 @@ class UpDown:
 
 if __name__ == "__main__":
 	# next line is necessary for deployment on nginx + fastcgi (see http://webpy.org/cookbook/fastcgi-nginx)
-#	web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)	
+#	web.wsgi.runwsgi = lambda func, addr=None: web.wsgi.runfcgi(func, addr)
 	app.run()
